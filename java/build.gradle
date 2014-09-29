@@ -1,1 +1,13 @@
 apply plugin: 'java'
+
+dependencies {
+    testCompile 'org.testng:testng:6.8.8'
+}
+
+repositories {
+    mavenCentral()
+}
+
+test {
+    useTestNG()
+}
