@@ -13,6 +13,7 @@ public class BankAccount {
 
     public synchronized void deposit(int amount) {
         balance += amount;
+        System.out.println(String.format("Deposited $%d. Balance $%d", amount, balance));
     }
 
     public synchronized void withdraw(int amount) {
@@ -22,6 +23,7 @@ public class BankAccount {
         }
 
         balance -= amount;
+        System.out.println(String.format("Withdrew $%d. Balance $%d", amount, balance));
     }
 
     public int getBalance() {
