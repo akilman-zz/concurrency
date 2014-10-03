@@ -1,6 +1,8 @@
-(ns app.core)
+(ns app.core
+  (:refer-clojure :exclude [map reduce into partition partition-by take merge])
+  (:require [clojure.core.async :refer :all :as async]))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(let [c (chan 10)]
+  (>!! c "hello")
+  (println (<!! c))
+  (close! c))
