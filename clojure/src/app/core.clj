@@ -2,25 +2,43 @@
   (:refer-clojure :exclude [map reduce into partition partition-by take merge])
   (:require [clojure.core.async :refer :all :as async]))
 
-; function to add some value 'c' to 'n'
-(defn increment [c n] (+ c n))
+;;; "deposits" money into a given bank account
+(defn deposit [c n]
+  (println (str "Depositing $" n " dollars"))
+  (+ c n))
+
+;;; "withdraws" money from a given bank account
+(defn withdraw [c n]
+  (println (str "Withdrawing $" n " dollars"))
+  (- c n))
+
+;;; Wrapper for Thread.sleep. Reads a bit better
+(defn sleep-for [n]
+  (Thread/sleep n))
 
 (defn example []
-  (let [
-         ; start with a bank account of balance zero
-         bank-account (agent 0)]
 
-    (send bank-account increment 5)
+  ;; start with a bank account of balance zero
+  (let [bank-account (agent 0)
+        nTransactions 5]
 
-    (Thread/sleep 1000)
+    (future
+      (dotimes [n nTransactions]
+        (sleep-for (rand 500))
+        (send bank-account deposit 5)))
 
-    ; print output
-    (println @bank-account)))
+    (future
+      (dotimes [n (- nTransactions 1)]
+        (sleep-for (rand 500))
+        (send bank-account withdraw 5)))
 
-; onward!
+    (sleep-for 5000)
+
+    ;; print output
+    (println (str "Remaining balance " @bank-account))))
+
+;; onward!
 (example)
-(example)
-(example)
-(example)
-(example)
-(example)
+
+;; required cleanup for threads in the background
+(shutdown-agents)
