@@ -1,15 +1,15 @@
-(ns app.core
+(ns agent.core
   (:refer-clojure :exclude [map reduce into partition partition-by take merge])
   (:require [clojure.core.async :refer :all :as async]))
 
 ;;; "deposits" money into a given bank account
 (defn deposit [c n]
-  (println (str "Depositing $" n " dollars"))
+  (io! (println (str "Depositing $" n " dollars")))
   (+ c n))
 
 ;;; "withdraws" money from a given bank account
 (defn withdraw [c n]
-  (println (str "Withdrawing $" n " dollars"))
+  (io! (println (str "Withdrawing $" n " dollars")))
   (- c n))
 
 ;;; Wrapper for Thread.sleep. Reads a bit better
