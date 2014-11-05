@@ -6,6 +6,13 @@ import (
 		"math/rand"
 )
 
+/**
+ * Illustration of Go channels with select to choose input from multiple
+ * 
+ * Creates two go routines and two channels for generating and submitting deposits and withdrawls.
+ * The main thread of execution uses a select construct in a loop to process each type of trasnaction
+ * appropriately
+ */
 func main() {
     
 	rand.Seed(42)
@@ -13,11 +20,9 @@ func main() {
 	var nDeposits int = rand.Intn(100)	
 	var nWithdrawls int = rand.Intn(100)
 
-	// Two channels for deposits and withdrawls, respective
 	deposits := make(chan int)
 	withdrawls := make(chan int)
 
-	// go function for processing deposits
 	go func() {
 		for i := 0; i < nDeposits; i++ {
 			time.Sleep(time.Duration(rand.Intn(1000)))
@@ -25,7 +30,6 @@ func main() {
 		}
 	}()
 
-	// go function for processing withdrawls
 	go func() { 
 		for i := 0; i < nWithdrawls; i++ {
 			time.Sleep(time.Duration(rand.Intn(1000)))
@@ -33,15 +37,13 @@ func main() {
 		}
 	}()
 
-	// our "bank account"
 	var balance int = 0
 
 	var nTransactions int = nDeposits + nWithdrawls
 
-	// loop through, use select construct to process transactions
 	for i := 0; i < nTransactions; i++ {
 		select {
-		case deposit := <- deposits:
+		case deposit := <- deposits:			
 			balance += deposit
 			fmt.Printf("Deposited $%v\n", deposit)
 

@@ -1,10 +1,17 @@
-import akka.actor.{ActorRef, Actor, ActorSystem, Props}
+import akka.actor.{Actor, ActorSystem, Props}
 
 object App {
 
+  /**
+   * Simple local [[Actor]] example
+   *
+   * An [[ActorSystem]] is created, which contains a [[BankAccount]] actor representing a bank account. The main
+   * thread simply fires a [[Deposit]] messages to the [[BankAccount]] actor once a second
+   *
+   * @param args main program arguments
+   */
   def main(args: Array[String]) {
 
-    // spawn actor system
     val system = ActorSystem("bank-account")
 
     val initialBalance = 100
@@ -17,6 +24,12 @@ object App {
   }
 }
 
+/**
+ * [[Actor]] representing a bank account. Initialized with an initial balance, and maintains a variable running
+ * balance
+ *
+ * @param initialBalance initial balance of the bank account
+ */
 class BankAccount(val initialBalance: Int) extends Actor {
 
   var balance = initialBalance
@@ -40,6 +53,9 @@ class BankAccount(val initialBalance: Int) extends Actor {
   }
 }
 
+/**
+ * Messages representing [[BankAccount]] transactions
+ */
 trait Op
 case class Deposit(val amount: Int) extends Op
 case class Withdraw(val amount: Int) extends Op
